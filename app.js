@@ -14,9 +14,66 @@ const rtm = new RtmClient(token, {
   autoMark: true,
 });
 
+/* proxy for now, for flexibility in this area later */
+const setState = (newState) => {
+  state = newState;
+}
+
+const states = {
+  DEFAULT: "DEFAULT",
+  GET_NAME: "GET_NAME",
+  GET_ADDRESS: "GET_ADDRESS",
+  GET_PHONE: "GET_PHONE"
+}
+
+/* init state, set initial state */
+let state;
+state = states.DEFAULT;
+
+/* functions that send responses and set state, called based on state */
+
+const handlers = {};
+
+handlers.DEFAULT = (message) => {
+  console.log(message.text, state);
+  rtm.sendMessage("Welcome! What's your name?", message.channel);
+  setState(states.GET_NAME);
+  console.log(message.text, state);
+
+}
+
+handlers.GET_NAME = (message) => {
+  console.log(message.text, state);
+  rtm.sendMessage("Ok, what's your address?", message.channel);
+  setState(states.GET_ADDRESS);
+  console.log(message.text, state);
+
+}
+
+handlers.GET_ADDRESS = (message) => {
+
+  console.log(message.text, state);
+
+  rtm.sendMessage("What's your phone number?", message.channel);
+  setState(states.GET_PHONE);
+  console.log(message.text, state);
+
+}
+
+handlers.GET_PHONE = (message) => {
+  console.log(message.text, state);
+  rtm.sendMessage("All set!", message.channel)
+  setState(states.DEFAULT);
+  console.log(message.text, state);
+}
+
+const router = (message) => {
+  handlers[state](message);
+}
+
 // Listens to all `message` events from the team
 rtm.on(RTM_EVENTS.MESSAGE, (message) => {
-  rtm.sendMessage('Beep boop hello world1', message.channel)
+  router(message);
 });
 
 rtm.start();
