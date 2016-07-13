@@ -1,0 +1,16 @@
+{
+  "name": "chat-bot",
+  "version": "1.0.0",
+  "description": "A demo chat bot",
+  "main": "app.js",
+  "scripts": {
+    "start": ". ./.token && node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Audrey Li",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/client": "^3.5.1",
+    "is-phone": "^2.0.0"
+  }
+}
